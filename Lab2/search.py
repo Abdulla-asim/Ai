@@ -107,12 +107,34 @@ def whateverFirstSearch(problem, frontier):
 
 
 def depthFirstSearchStats(problem):
-    """
-        Call whateverFirstSearch and return results that
-        will respect DFS behavior.
-        Returns: the 4 tuple returned by whateverFirstSearch
-    """
-    util.raiseNotDefined()
+
+    from util import Stack
+    from node import Node
+
+    frontier = Stack()
+    start_node = Node(problem.getStartState(), None, None, 0)
+    frontier.push(start_node)
+    
+    explored = set()
+    num_removed = 0
+    num_added = 1
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        num_removed += 1
+        
+        if problem.isGoalState(node.state):
+            return node.getPath(), node.getCost(), node.getDepth(), node.getDepth()
+
+        if node.state not in explored:
+            explored.add(node.getState())
+            
+            for successor, action, stepCost in problem.getSuccessors(node.state):
+                child_node = Node(successor, node, action, node.getCost() + stepCost)
+                frontier.push(child_node)
+                num_added += 1
+
+    return None, None, num_removed, num_added
 
 
 def depthFirstSearch(problem):
@@ -125,13 +147,34 @@ def depthFirstSearch(problem):
 
 
 def breadthFirstSearchStats(problem):
-    """ Search the shallowest nodes in the search tree first.
-        Returns: the 4 tuple returned by whateverFirstSearch
-    """
-    
-    "*** YOUR CODE HERE ***"
 
-    util.raiseNotDefined()
+    from util import Queue
+    from node import Node
+
+    frontier = Queue()
+    start_node = Node(problem.getStartState(), None, None, 0)
+    frontier.push(start_node)
+    
+    explored = set()
+    num_removed = 0
+    num_added = 1
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        num_removed += 1
+        
+        if problem.isGoalState(node.state):
+            return node.getPath(), node.getCost(), node.getDepth(), node.getDepth()
+
+        if node.state not in explored:
+            explored.add(node.getState())
+            
+            for successor, action, stepCost in problem.getSuccessors(node.state):
+                child_node = Node(successor, node, action, node.getCost() + stepCost)
+                frontier.push(child_node)
+                num_added += 1
+
+    return None, None, num_removed, num_added
 
 
 def breadthFirstSearch(problem):
